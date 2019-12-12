@@ -1,2 +1,3 @@
 # EJ2-DataGrid-MVC-Editing-Batch-Aggregates-calculate-difference-between-columns
-Calculate the total difference between two columns in grid on batch editing using aggregates. Also prevent updating the values if the aggregate column values differ.
+
+I256872 – This sample demonstrates on how to calculate the total difference between two columns on batch editing using aggregates and cancel the value updating if the total column values differ.

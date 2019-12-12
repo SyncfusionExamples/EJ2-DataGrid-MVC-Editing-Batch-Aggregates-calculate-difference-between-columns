@@ -1,0 +1,37 @@
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@{
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Add");
+    toolbarItems.Add("Edit");
+    toolbarItems.Add("Delete");
+    toolbarItems.Add("Update");
+    toolbarItems.Add("Cancel");
+}
+
+@Html.EJS().Grid("BatchEdit").DataSource((IEnumerable<object>)ViewBag.DataSource).CellSaved("CellSaved").BeforeBatchSave("BeforeBatchSave").Columns(col =>
+{
+    col.Field("ID").HeaderText("ID").IsPrimaryKey(true).Width("120").ValidationRules(new { required = "true" }).Add();
+    col.Field("CustomerName").HeaderText("Customer Name").Width("150").ValidationRules(new { required = "true", minLength = 3 }).Add();
+    col.Field("Credit").HeaderText("Credit").Width("150").Add();
+    col.Field("Debit").HeaderText("Debit").Width("150").Add();
+
+}).AllowPaging().PageSettings(page => page.PageCount(2)).EditSettings(edit => { edit.AllowAdding(true).AllowEditing(true).AllowDeleting(true).Mode(Syncfusion.EJ2.Grids.EditMode.Batch); }).Toolbar(toolbarItems).Aggregates(agg=> { agg.Columns(new List<Syncfusion.EJ2.Grids.GridAggregateColumn>() { new Syncfusion.EJ2.Grids.GridAggregateColumn() { Field = "Credit", Type = "Sum", FooterTemplate = "Sum: ${Sum}" }, new Syncfusion.EJ2.Grids.GridAggregateColumn() { Field = "Debit", Type = "Sum", FooterTemplate = "Sum: ${Sum}" } }).Add(); }).Render()
+
+<script>
+    function CellSaved(args) {
+        this.aggregateModule.refresh();
+        var diff = this.aggregateModule.footerRenderer.aggregates.aggregates["Credit - sum"] - this.aggregateModule.footerRenderer.aggregates.aggregates["Debit - sum"];
+    }
+
+    function BeforeBatchSave(args) {
+        if (this.aggregateModule.footerRenderer.aggregates.aggregates["Credit - sum"] === this.aggregateModule.footerRenderer.aggregates.aggregates["Debit - sum"]) {
+            alert('Data updated');
+        } else {
+            alert('Total Credit and Debit not equal');
+            args.cancel = true;
+        }
+    }
+</script>
