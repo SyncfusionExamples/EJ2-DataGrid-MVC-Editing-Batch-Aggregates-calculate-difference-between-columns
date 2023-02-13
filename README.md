@@ -12,5 +12,6 @@ This sample explains about how to calculate the total difference between two col
 
 * Checkout this project to a location in your disk.
 * Open the solution file using the Visual Studio 2022.
+* Replace your PublicKeyToken under the section tag in the Web.config file to run this sample.
 * Restore the NuGet packages by rebuilding the solution.
 * Run the project.
